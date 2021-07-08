@@ -1,0 +1,37 @@
+{
+  "name": "mongo-export",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "pkg ."
+  },
+  "keywords": [],
+  "author": "",
+  "bin": "bin.js",
+  "pkg": {
+    "scripts": "*/**/*.js",
+    "targets": [
+      "node14-win-x64",
+      "node14-linux-x64",
+      "node14-macos-x64"
+    ],
+    "outputPath": "dist"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "archiver": "^5.3.0",
+    "chalk": "^4.1.1",
+    "cli-progress": "^3.9.0",
+    "commander": "^8.0.0",
+    "golangify": "^0.3.1",
+    "bin": "bin.js",
+    "hidefile": "^3.0.0",
+    "mongodb": "^3.6.10",
+    "unzipper": "^0.10.11",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "pkg": "^5.3.0"
+  }
+}
