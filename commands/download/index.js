@@ -3,6 +3,7 @@ const fs = require("fs").promises;
 
 const chalk = require("chalk");
 const cliProgress = require('cli-progress');
+const go = require("golangify");
 const { v4: uuid } = require("uuid");
 
 const genTempDir = require("../../lib/create-temp-folder.js");
@@ -38,6 +39,19 @@ async function* getDocs(db, name, cb) {
 module.exports = async (uri, file, dbName) => {
 
 	const [client, error] = await mongoConnect(uri, dbName);
+
+    const [databases, fetchDbError] = (await go(() => client.db("admin").admin().listDatabases())());
+
+    if (fetchDbError) {
+        log(chalk.redBright("Can't fetch dbs"));
+        process.exit(1);
+    }
+
+    if (!databases.databases.map(v => v.name).includes(dbName)) {
+        log(chalk.redBright(`Database ${chalk.bold(`"${dbName}"`)} doesn't exist`));
+        process.exit(1);
+    }
+
 
 	if (error) {
 		client.close();

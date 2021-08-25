@@ -1,4 +1,4 @@
-## What is this?
+# mongo database manager
 This project is a tool to download and download large mongodb databases. For when you want to take backups / switch server / delete mongodb.
 
 ## How to use
