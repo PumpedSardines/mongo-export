@@ -30,10 +30,17 @@ async function* encodeCollection(db: Db, name: string) {
 	return;
 }
 
-export default async function download(uri: string, file: string, dbName: string): Promise<void> {
-	const client = await mongo(uri).catch(() => {
-		throw new Error("Couldn't connect to mongodb");
-	});
+interface DownloadOptions {
+	uri: string,
+	file: string,
+	db: string
+}
+
+export default async function download({ uri, file, db: dbName }: DownloadOptions): Promise<void> {
+	const client = await mongo(uri)
+		.catch(() => {
+			throw new Error("Couldn't connect to mongodb");
+		});
 
 	const db = client.db(dbName);
 

@@ -1,25 +1,22 @@
-const chalk = require("chalk");
+import genTempDir from "../lib/gen-temp-dir";
+import mongo from "../lib/mongo";
+import * as document from "../lib/document";
+import { unzip } from "../lib/zip";
 
-const mongoConnect = require("../../lib/mongodb.js");
-const docParser = require("../../lib/doc-parser");
-const { unzip } = require("../../lib/zip");
-const genTempDir = require("../../lib/create-temp-folder.js");
+import { promises as fs } from "fs";
+import * as path from "path";
 
-const path = require("path");
-const fs = require("fs").promises
+interface UploadOptions {
+    uri: string,
+    file: string,
+    db: string
+}
 
-const { log } = console;
+export default async function upload({ uri, file, db: dbName }: UploadOptions) {
 
-
-
-module.exports = async (uri, file, dbName) => {
-
-    const [client, error] = await mongoConnect(uri, dbName);
-
-    if (error) {
-        client.close();
-        console.log(chalk.redBright("Something went wrong..."))
-    }
+    const client = await mongo(uri).catch(() => {
+        throw new Error("Can't connect to mongodb");
+    });
 
     const db = client.db(dbName);
 
@@ -42,7 +39,7 @@ module.exports = async (uri, file, dbName) => {
                 const filePath = path.resolve(collectionPath, file);
                 
                 const docs = JSON.parse(await fs.readFile(filePath, "utf-8"))
-                    .map(doc => docParser.decode(doc));
+                    .map((doc: any) => document.decode(doc));
 
                 await db.collection(collection).insertMany(docs);
             }));
@@ -52,7 +49,4 @@ module.exports = async (uri, file, dbName) => {
     }
 
     await deleteTemp();
-    client.close();
-
-	log(chalk.green("done!"));
-};
+}

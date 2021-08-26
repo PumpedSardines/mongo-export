@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb";
-import { encode, decode } from "./document";
+import { encode, decode } from "../../src/lib/document";
 
 const ids = new Array(100).fill(0).map(() => new ObjectId());
 

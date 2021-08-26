@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "es2020",
     "module": "commonjs",
-    "lib": ["es6"],
+    "lib": ["es2020"],
     "declaration": true,
     "outDir": "dist/typescript",
     "strict": true,
